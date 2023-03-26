@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover, orientation=portrait">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    @media screen and (orientation: landscape) {
+    body {
+      display: none;
+    }
+    }
+    </style>
+	<title>KVT MAPS</title>
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+
+	<link rel="icon" href="https://png.pngtree.com/png-vector/20190704/ourlarge/pngtree-pin-map-graphic-icon-design-template-vector-illustration-png-image_1538447.jpg">
+
+	<style>
+		#map{
+			height: 100vh;
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+<div id="intro">
+  <h1><img src="logo.png" alt="Logo"></h1>
+  <h2>Welcome to KVT MAP</h2>
+  <p>Ini merupakan Projek Tahun Akhir<br>Dihasilkan oleh pelajar DVM2 DKB</p>
+  <button id="start-btn">KVTMAP</button>
+  <h5>*Projek ini bukan "official untuk semua orang", ia digunakan untuk semua<br>orang yang berada di KVT sahaja</h5>
+</div>
+  <div id="map"></div>
+  <div id="instruction-box">Map ini tidak mempunyai function zoom in/out. <br>Anda boleh double tap screen untuk zoom. Untuk zoom out, hanya scroll/refresh websitre ini.</div>
+  <div id="instruction-box2">Klik pada tombol putih untuk mencari tempat atau lokasi yang ada pada map.<br>'Search function' sedang diusahakan</div>
+</body>
+</html>
+
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin="">
+</script>
+
+<script>
+
+  // Get the intro section and the start button
+const intro = document.getElementById('intro');
+const startBtn = document.getElementById('start-btn');
+
+// Add an event listener to the start button
+startBtn.addEventListener('click', () => {
+  // Hide the intro section
+  intro.style.display = 'none';
+
+  // Display the map
+  // Your code to create and display the Leaflet map goes here
+});
+
+
+</script>
+
+
+<script>
+
+var southWest = L.latLng(4.2862603113553455, 117.88788914346759);
+var northEast = L.latLng(4.290165373674429, 117.89357542618393);
+var bounds = L.latLngBounds(southWest, northEast);
+
+var map = L.map('map', {
+    maxBounds: bounds,
+    maxBoundsViscosity: 0.75,
+    center: [4.288139550641546, 117.89082483806902],
+    zoom: 18,
+    scrollWheelZoom: false,
+    doubleClickZoom: true,
+    touchZoom: false,
+    zoomControl: false,
+    dragging: true
+});
+
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+    maxZoom: 18
+}).addTo(map);
+
+
+    var customIcon = L.icon({
+    iconUrl: 'icon.png',
+    iconSize: [24, 24],
+    iconAnchor: [9, 0],
+    popupAnchor: [3, 9]
+    });
+
+    var customIcon2 = L.icon({
+    iconUrl: 'icon2.jpg',
+    iconSize: [24, 24],
+    iconAnchor: [9, 0],
+    popupAnchor: [3, 9]
+    });
+
+
+	//osm layer
+	var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	});
+	osm.addTo(map);
+
+  // Define the instruction boxes
+var instructionBox1 = L.DomUtil.get('instruction-box');
+var instructionBox2 = L.DomUtil.get('instruction-box2');
+
+// Add event listeners to show/hide the instruction boxes
+map.on('popupopen', function(e) {
+    instructionBox1.style.display = 'none';
+    instructionBox2.style.display = 'none';
+});
+map.on('popupclose', function(e) {
+    instructionBox1.style.display = 'block';
+    instructionBox2.style.display = 'block';
+});
+
+
+
+//-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.288639418852946, 117.89046802744349],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="pejabat.jpg" width="150px" height="125px"></div>' + '<div><h4>Pejabat Umum Kolej Vokasional Tawau</h4><p>Berada di tingkat 1 kawasan Trampil</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true});
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+//-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.288639418852654, 117.8908435367068],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="hem.jpg" width="150px" height="125px"></div>' + '<div><h4>Bilik Hal Ehwal Murid KVT</h4><p>Tingkat Satu dan Bersebelahan bilik Unit Psikologi dan Kerjaya</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+//-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.287615821234623, 117.89181697580527],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="dewantas.jpg" width="150px" height="125px"></div>' + '<div><h4>Dewan Tun Ahmad Shah</h4><p>Tempat berkumpul untuk melakukan majlis rasmi seperti perhimpunan rasmi, aktiviti sukan dan sebagainya</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+//-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.287375097983631, 117.8921200654269],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="kantin.jpg" width="150px" height="125px"></div>' + '<div><h4>Kantin Perdana KVT</h4><p>Berada bersebelahan dewan Tun Ahmad Shah dan buka pada 6a.m. hingga 4p.m. waktu pembelajaran KVT</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+//-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.287144176043223, 117.89024037252506],{icon: customIcon2}).addTo(map);
+
+    var popupContent = '<div><img src="gatemasuk1.png" width="150px" height="125px"></div>' + '<div><h4>Pintu Masuk pada bahagian atas<br>Pagar 2</h4><p>Pintu masuk untuk pelajar dan residen KVT</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+//-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.287368851144944, 117.89174777400031],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="kimpalan.jpg" width="150px" height="125px"></div>' + '<div><h4>Bengkel Kimpalan</h4><p>Bengkel kimpalan yang terletak pada di blok unggul bersebelahan kantin</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+//-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.287336754706188, 117.89142590891508],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="eletronik.jpg" width="150px" height="125px"></div>' + '<div><h4>Bengkel Elektronik</h4><p>Berhadapan dengan kandang arnab dan dewan makan asrama</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+    
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.287358152332182, 117.89108526836655],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="automatik.jpg" width="150px" height="125px"></div>' + '<div><h4>Bengkel Automotif</h4><p>Berdekatan dengan pintu masuk pagar 2 dan bersebelahan</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.287248489492667, 117.89055150876685],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="pembinaan.jpg" width="150px" height="125px"></div>' + '<div><h4>Bengkel Pembinaan</h4><p>berdekatan dengan pintu masuk bahagian atas</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.28739292347248, 117.89036375414095],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="blokmahir.jpg" width="150px" height="125px"></div>' + '<div><h4>Kelas Blok Mahir</h4><p>Bersebelahan Gelanggang<br>Bola Tampar</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.2875239839132435, 117.89072317014565],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="pemesinan.jpg" width="150px" height="125px"></div>' + '<div><h4>Bengkel Pemesinan</h4><p>Tempat pembelajaran untuk pelajar yang mengambil kursus Teknologi Pemesinan</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.287863671076426, 117.89099407325999],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="eletrik.jpg" width="150px" height="125px"></div>' + '<div><h4>Bengkel Elektrik</h4><p>Tempat pembelajaran untuk pelajar yang mengambil kursus Teknologi Elektrik</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.287950173026371, 117.89030379514493],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="tanggaturun.jpg" width="150px" height="125px"></div>' + '<div><h4>Tangga Blok Mahir</h4><p>Turun untuk ke blok Trampil</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.287741547521788, 117.89066057666047],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="taman.jpg" width="150px" height="125px"></div>' + '<div><h4>Taman Datuk Michael Lim</h4></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.288086583986837, 117.89085637791875],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="tanggaeletrik.jpg" width="150px" height="125px"></div>' + '<div><h4>Tangga Bengkel Eletrik</h4><p>Berada dibelakang bengkel eletrik yang menuju ke blok Trampil</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.288525698278626, 117.8908426341952],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="kauseling.jpg" width="150px" height="125px"></div>' + '<div><h4>Bilik Unit Psikologi dan Kerjaya</h4><p>Bilik kaunseling dan tempat berkumpul ahli PRS</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.287624096199548, 117.89126498768461],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="kandangarnab.jpg" width="150px" height="125px"></div>' + '<div><h4>Kandang Arnab</h4><p>Peliharaan oleh Bengkel Pembinaan</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.288945397983394, 117.8903423078826],{icon: customIcon2}).addTo(map);
+
+    var popupContent = '<div><img src="gate2.jpg" width="150px" height="125px"></div>' + '<div><h4>Pintu Masuk pada bahagian bawah<br>Pagar 1</h4><p>Pintu masuk yang dikhaskan untuk<br>pensyarah dan tetamu luar yang hadir</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.288651906443985, 117.8911315489224],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="tanggakolam.jpg" width="150px" height="125px"></div>' + '<div><h4>Tangga Bukit</h4><p>Laluan ke kawasan Mahir dan Unggul</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.287794981886229, 117.89255248864987],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="jalankulinari.png" width="150px" height="125px"></div>' + '<div><h4>Jalan Blok Unggul</h4><p>Kawasan Trampil</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.2880581320493585, 117.89128943114964],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="surau.png" width="150px" height="125px"></div>' + '<div><h4>Surau  Al-Hidayah</h4><p>Tempat untuk para residen KVT atau orang luar untuk melakukan ibadah, pembelajran agama dan lain-lain.</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.288678896178432, 117.89099622131334],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="koperasi.png" width="150px" height="125px"></div>' + '<div><h4>Koperasi KVT</h4><p> Pelajar, pensyarah dan pekerja di KVT boleh membeli barang keperluan yang sesuai untuk kolej</p><p>*Mempunyai kemudahan Wi-Fi<br>Dan Mempunyai pembelian Top-UP telepon bimbit</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.287671278791001, 117.8902519195463],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="simpangflattangga.png" width="150px" height="125px"></div>' + '<div><h4>Kawasan Koperasi Lama</h4><p>Kawasan koperasi lama</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.287239468663815, 117.88974838626372],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="gelanggang.jpg" width="150px" height="125px"></div>' + '<div><h4>Gelanggang Bola Tampar</h4><p>Kawasan perhimpunan disiplin pada setiap pagi dan melakukan aktiviti sukan riadah</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.288411646284846, 117.89276535793108],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="kosmetik.jpg" width="150px" height="125px"></div>' + '<div><h4>Bengkel Kosmetologi</h4><p>Tingkat 2, pada bahagian kiri</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+        
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.288499911364007, 117.8921886830408],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="fesyen.jpg" width="150px" height="125px"></div>' + '<div><h4>Bengkel Seni Reka Fesyen</h4><p>Tingkat 2, pada bahagian kanan blok</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+        
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.288481188469276, 117.89242203520571],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="bakeri.jpg" width="150px" height="125px"></div>' + '<div><h4>Bengkel Bakeri dan Pastri</h4><p>Tingkat 1 pada blok kanan</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+        
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.288328730595119, 117.89245690392],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="jkk.jpg" width="150px" height="125px"></div>' + '<div><h4>Bengkel Pendidikan Awal Kanak-kanak</h4><p>Di Tingkat 1</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+        
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.288063935267714, 117.89247299717276],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="kulinari.jpg" width="150px" height="125px"></div>' + '<div><h4>Bengkel Seni Kulinari</h4><p>Bersebelahan jalan kulinari</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+        
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.288807501712441, 117.8904787748126],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="ksk.jpg" width="150px" height="125px"></div>' + '<div><h4>Bengkel Sistem Komputer dan Rangkaian</h4><p>Pada tingkat 2, anda menaiki/melalui mana-mana tangga yang berdekatan</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.2888155258068155, 117.89074699570665],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="akaun.jpg" width="150px" height="125px"></div>' + '<div><h4>Bengkel Perakaunan</h4><p>Pada tingkat 3, anda menaiki/melalui mana-mana tangga yang berdekatan</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.288602159456468, 117.89072928268128],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="buku.jpg" width="150px" height="125px"></div>' + '<div><h4>Perpustakaan</h4><p>Pada tingkat 2, anda menaiki/melalui tangga bersebelahan Bilik Hal Ehwal Murid</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    } 
+
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.2883547497722105, 117.89162379939414],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="asramalelaki.jpg" width="150px" height="125px"></div>' + '<div><h4>Asrama Lelaki KVT</h4><p>Tempat tinggal kepada residen/pelajar lelaki</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    } 
+
+    //-------s------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.287985641121376, 117.89174718100595],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="asramalady.jpg" width="150px" height="125px"></div>' + '<div><h4>Asrama Perempuan KVT</h4><p>Tempat tinggal kepada residen/pelajar perempuan</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+    //-------------------------------------------------------------------------------------------------------
+    var marker = L.marker([4.288821562615806, 117.88943033696852],{icon: customIcon}).addTo(map);
+
+    var popupContent = '<div><img src="padang.jpg" width="150px" height="125px"></div>' + '<div><h4>*Masih dalam pembinaan*</h4><p>Status : Masih pembinaan</p></div>';
+
+    marker.bindPopup(popupContent, {closeButton: false, keepInView: true });
+
+    marker.on('click', () => {
+      popup.openPopup();
+    });
+
+    if (L.Browser.mobile) {
+    marker.on('tap', () => {
+    popup.openPopup();
+    });
+    }
+  </script>
+
+  <script>
+	
+  //tile layer
+	var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+		attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+	});
+	Esri_WorldImagery.addTo(map);
+
+
+	// Define the walking path using an array of latitudes and longitudes
+var path = [
+	[4.288733730570073, 117.89040274297173],
+	[4.288723088568659, 117.89056637852843],
+    [4.288719541234869, 117.8907442432627],
+    [4.288715993902301, 117.89085096210403],
+    [4.288581195203662, 117.89085096210403],
+    [4.288474775161646, 117.89085451939872],
+    [4.2884109231293195, 117.89083673292521],
+    [4.28840028112343, 117.89094345176647],
+    [4.288680520562863, 117.89094700906116],
+    [4.288733730570073, 117.8908865350511],
+    [4.288730183236311, 117.89108574355498],
+    [4.288662783892519, 117.89108574355498],
+    [4.288659236558402, 117.8911497748598],
+    [4.288549269192586, 117.89115688944912],
+    [4.288442849146136, 117.8912885093522],
+    [4.288339976420474, 117.89129206664688],
+    [4.288254840361176, 117.89140945737233],
+    [4.288024263487472, 117.89132763959401],
+    [4.287914296030323, 117.89132052500452],
+    [4.28781497057156, 117.89132408229926],
+    [4.287779497190272, 117.8909612382401],
+    [4.287797233881122, 117.8907193421997],
+    [4.287775949852048, 117.89046321698186],
+    [4.2875489201770876, 117.89047388887997],
+    [4.287460236689967, 117.89047388887997],
+    [4.287474426048561, 117.89071222762419],
+    [4.287485068067355, 117.89100036849584],
+    [4.28750280476504, 117.89136321255512],
+    [4.287570204212443, 117.891388113618],
+    [4.287591488247287, 117.89182921816092],
+    [4.2877440238112285, 117.89180431709792],
+    [4.287793686546891, 117.89230945294685],
+    [4.287839801941331, 117.89230233835741],
+    [4.28785399129292, 117.89278613043678],
+    [4.288198082986909, 117.89277901584734],
+    [4.288198082986909, 117.89262960946957],
+    [4.288031358165512, 117.89263672405889],
+    [4.288031358165512, 117.89245174473399],
+    [4.288205177659393, 117.89241972908155],
+    [4.288432207144581, 117.89241261449217],
+    [4.288453491155323, 117.89208534338002],
+    [4.288308050403202, 117.89194660888631],
+    [4.288272577044864, 117.89191103593924],
+    [4.2882690297089, 117.89155174917471],
+    [4.288254840365056, 117.8913952282075],
+    [4.288361260437682, 117.89149838975408],
+    [4.288382544450457, 117.89177585874017],
+    [4.288410923133185, 117.89195016618106]
+	];
+var polyline = L.polyline(path, {color: 'white', weight: 5}).addTo(map);   
+
+map.fitBounds(polyline.getBounds());
+
+
+var path = [
+    [4.288408016173378, 117.8908406511672],
+    [4.2883190260938875, 117.89083618917044],
+    [4.288350172622231, 117.89029182565008]
+];
+var polyline = L.polyline(path, {color: 'white', weight: 5}).addTo(map);   
+
+map.fitBounds(polyline.getBounds());
+
+var path = [
+    [4.288321250846124, 117.89083618916925],
+    [4.28825005877529, 117.89090311911099],
+    [4.2881699676872245, 117.89091204310262],
+    [4.288161068676516, 117.89083842016845],
+    [4.287991987460643, 117.89086073014846],
+    [4.287998661719911, 117.8910949849411],
+    [4.287793984410598, 117.8910994469378]
+];
+var polyline = L.polyline(path, {color: 'white', weight: 5}).addTo(map);   
+
+map.fitBounds(polyline.getBounds());
+
+var path = [
+    [4.287757534145442, 117.89027238381624],
+    [4.2877725738736245, 117.8904646785615]
+];
+var polyline = L.polyline(path, {color: 'white', weight: 5}).addTo(map);   
+
+map.fitBounds(polyline.getBounds());
+
+
+var path = [
+	[4.287821783668221, 117.8913246553816],
+    [4.28750294256902, 117.89135559757159]
+	];
+var polyline = L.polyline(path, {color: 'white', weight: 5}).addTo(map);   
+
+map.fitBounds(polyline.getBounds());
+
+
+var path = [
+	[4.287772071894182, 117.89132981241312],
+    [4.287790928084419, 117.89160141607721]
+	];
+var polyline = L.polyline(path, {color: 'white', weight: 5}).addTo(map);   
+
+map.fitBounds(polyline.getBounds());
+
+
+var path = [
+	[4.288729340202082, 117.89108463702746],
+    [4.288733695237127, 117.89115014599332],
+    [4.288755470414543, 117.89124840944379],
+    [4.288446262842825, 117.8912877148241]
+	];
+var polyline = L.polyline(path, {color: 'white', weight: 5}).addTo(map);   
+
+map.fitBounds(polyline.getBounds());
+
+
+var path = [
+	[4.288546428689898, 117.89115451325819],
+    [4.288339564427204, 117.8911523296257],
+    [4.288221978399704, 117.89103441348686],
+    [4.288171895456941, 117.89091213008311]
+
+	];
+var polyline = L.polyline(path, {color: 'white', weight: 5}).addTo(map);   
+
+map.fitBounds(polyline.getBounds());
+
+
+var path = [
+	[4.287461137629052, 117.89047358351763],
+    [4.287462902866267, 117.89040454604617],
+    [4.287397589068007, 117.89041693738699]
+
+	];
+var polyline = L.polyline(path, {color: 'white', weight: 5}).addTo(map);   
+
+map.fitBounds(polyline.getBounds());
+
+
+var path = [
+	[4.287464668104164, 117.89040454604617],
+    [4.2874452504891, 117.8902027442054],
+    [4.287385232402258, 117.89020805478071],
+    [4.287358753833345, 117.88991951355376]
+	];
+var polyline = L.polyline(path, {color: 'white', weight: 5}).addTo(map);   
+
+map.fitBounds(polyline.getBounds());
+
+
+var path = [
+	[4.287761227984419, 117.89027178167692],
+    [4.287609417583525, 117.89017442114016],
+    [4.287438189537994, 117.89019566343973]
+	];
+var polyline = L.polyline(path, {color: 'white', weight: 5}).addTo(map);   
+
+map.fitBounds(polyline.getBounds());
+
+
+var path = [
+	[4.288345881715983, 117.89028231313722],
+    [4.288354155433211, 117.89017860131537],
+    [4.288271418255036, 117.89002510781881],
+    [4.2882796919731305, 117.88956462732659],
+    [4.287874279680139, 117.88925764033235]  
+
+	];
+var polyline = L.polyline(path, {color: 'white', weight: 5}).addTo(map);   
+
+map.fitBounds(polyline.getBounds());
+
+var path = [
+	[4.288924174877845, 117.89027678336403],
+	[4.288783575996305, 117.89271979979077],
+	[4.2886763344148875, 117.89286421429745],
+	[4.28774494004385, 117.8928825794924],
+	[4.287715787256218, 117.8922896289584],
+	[4.287479855425119, 117.89229884690451],
+
+    [4.28736972121308, 117.89058518949687],
+    [4.287330938016122, 117.89044035022096],
+    [4.287150395521672, 117.89024052566435],
+
+    [4.287161194136175, 117.88953653541222],
+    [4.2872714999823955, 117.88940133885382],
+    [4.287501303776409, 117.8894044115018],
+    [4.28774029965011, 117.88941977474809],
+    [4.287758683944972, 117.89027089853289],
+    [4.287973167351481, 117.89026475323482],
+    [4.288209099030212, 117.89024631734048],
+    [4.288337789005041, 117.89028011648116],
+    [4.2889475340712835, 117.89030469767368]
+
+];
+
+var polyline = L.polyline(path, {color: 'white', weight: 5}).addTo(map);   
+
+map.fitBounds(polyline.getBounds());
+</script>
